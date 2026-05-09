@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ross Energy — Sales Leads Pipeline</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #F2F4F7; color: #1a1a1a; }
+
+  /* ── Top bar ── */
+  .top-bar {
+    background: #1B2A4A; color: #fff;
+    padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .top-bar .meta { font-size: 12px; color: rgba(255,255,255,.6); margin-top: 2px; }
+  .top-bar .logo { font-size: 11px; background: #0D6E6E; color: #fff;
+    padding: 4px 10px; border-radius: 4px; font-weight: 600; letter-spacing: .05em; }
+
+  /* ── Controls ── */
+  .controls {
+    background: #fff; border-bottom: 1px solid #E0E4EA;
+    padding: 12px 28px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .controls label { font-size: 12px; color: #666; }
+  .controls select, .controls input {
+    font-size: 13px; padding: 6px 10px; border-radius: 6px;
+    border: 1px solid #D0D5DD; background: #fff; color: #1a1a1a;
+  }
+  .controls input[type=search] { flex: 1; min-width: 180px; }
+
+  /* ── Summary ── */
+  .summary {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    padding: 16px 28px; background: #fff; border-bottom: 1px solid #E0E4EA;
+  }
+  .metric { background: #F8F9FB; border-radius: 8px; padding: 12px 16px; }
+  .metric .lbl { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .metric .val { font-size: 26px; font-weight: 700; color: #1B2A4A; }
+  .metric .val.small { font-size: 15px; font-weight: 700; line-height: 1.7; color: #1B2A4A; }
+  .metric .sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    background: #fff; border-bottom: 1px solid #E0E4EA;
+    padding: 0 24px; display: flex; gap: 0;
+  }
+  .tab-btn {
+    padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; background: none; color: #999; border-bottom: 3px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn.active { color: #1B2A4A; border-bottom-color: #0D6E6E; }
+  .tab-btn:hover:not(.active) { color: #444; }
+
+  /* ── Main layout ── */
+  .main { display: grid; grid-template-columns: 1fr 340px; gap: 0; min-height: 600px; }
+  .left-col { overflow-y: auto; }
+
+  /* ── Leads panel ── */
+  .leads-panel { padding: 20px 24px; }
+  .panel-title { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 12px;
+    text-transform: uppercase; letter-spacing: .04em; }
+
+  /* ── Cards ── */
+  .card {
+    background: #fff; border: 1px solid #E4E8EF; border-radius: 10px;
+    margin-bottom: 10px; overflow: hidden; cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .card:hover { border-color: #0D6E6E; box-shadow: 0 2px 8px rgba(13,110,110,.1); }
+  .card.open { border-color: #1B2A4A; }
+  .card-head { display: flex; align-items: center; gap: 12px; padding: 13px 16px; }
+  .score {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+  }
+  .s-high { background: #D6EDDF; color: #1A6A3E; }
+  .s-mid  { background: #FFF3CD; color: #7A4800; }
+  .s-low  { background: #FDDCDC; color: #7A1A1A; }
+  .card-info { flex: 1; min-width: 0; }
+  .card-info .name { font-size: 14px; font-weight: 600; color: #1B2A4A; }
+  .card-info .sub  { font-size: 12px; color: #888; margin-top: 2px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+  .t-ccs   { background: #D6E8F0; color: #0A4A6E; }
+  .t-geo   { background: #D6EDDF; color: #0F5C32; }
+  .t-og    { background: #FBE9D0; color: #7A3800; }
+  .t-stage { background: #F2F4F7; color: #666; border: 1px solid #E0E4EA; }
+  .chevron { color: #bbb; font-size: 14px; margin-left: 4px; transition: transform .2s; flex-shrink: 0; }
+  .card.open .chevron { transform: rotate(180deg); }
+  .card-body { display: none; padding: 0 16px 16px; border-top: 1px solid #F0F2F6; }
+  .card.open .card-body { display: block; }
+  .trigger {
+    background: #EBF5FD; border-left: 3px solid #1B6FAB;
+    border-radius: 0 6px 6px 0; padding: 9px 12px; margin-top: 12px;
+    font-size: 13px; color: #0A3D5F; line-height: 1.55;
+  }
+  .trigger strong { display: block; font-size: 11px; color: #1B6FAB;
+    text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .dbox { background: #F8F9FB; border-radius: 6px; padding: 9px 12px; }
+  .dbox .dlbl { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 3px; }
+  .dbox .dval { font-size: 12px; color: #333; line-height: 1.5; }
+  .dbox.full { grid-column: 1 / -1; }
+  .src-link { display: inline-block; margin-top: 10px; font-size: 12px; color: #1B6FAB; }
+  .no-results { text-align: center; padding: 48px 20px; color: #aaa; font-size: 14px; }
+
+  /* ── History panel ── */
+  .history-panel { padding: 20px 24px; display: none; }
+  .history-panel.visible { display: block; }
+
+  .history-empty {
+    text-align: center; padding: 60px 30px;
+    background: #fff; border-radius: 10px; border: 2px dashed #D0D5DD;
+  }
+  .history-empty .icon { font-size: 40px; margin-bottom: 14px; }
+  .history-empty h3 { font-size: 15px; font-weight: 700; color: #1B2A4A; margin-bottom: 8px; }
+  .history-empty p { font-size: 13px; color: #888; line-height: 1.65; max-width: 400px; margin: 0 auto 10px; }
+  .history-empty code { font-size: 11px; background: #F2F4F7; padding: 2px 6px; border-radius: 4px; color: #555; }
+
+  .history-timeline { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+  .h-entry { background: #fff; border: 1px solid #E4E8EF; border-radius: 10px; overflow: hidden; }
+  .h-entry-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; cursor: pointer; transition: background .15s;
+  }
+  .h-entry-head:hover { background: #F8F9FB; }
+  .h-entry-head .date-label { font-size: 14px; font-weight: 600; color: #1B2A4A; }
+  .h-entry-head .date-meta { font-size: 12px; color: #888; margin-top: 2px; }
+  .h-stats { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .h-stat { font-size: 11px; background: #F2F4F7; border-radius: 4px; padding: 3px 8px; color: #555; font-weight: 600; }
+  .h-entry-body { display: none; padding: 0 18px 16px; border-top: 1px solid #F0F2F6; }
+  .h-entry.open .h-entry-body { display: block; }
+  .h-entry.open .chevron { transform: rotate(180deg); }
+
+  .changes-bar { display: flex; gap: 7px; margin: 12px 0 10px; flex-wrap: wrap; }
+  .chip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 10px; }
+  .chip-new     { background: #D6EDDF; color: #0F5C32; }
+  .chip-removed { background: #FDDCDC; color: #7A1A1A; }
+  .chip-changed { background: #FFF3CD; color: #7A4800; }
+  .chip-same    { background: #F2F4F7; color: #666; }
+
+  .h-lead-list { display: flex; flex-direction: column; gap: 5px; }
+  .h-lead-row {
+    display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+    background: #F8F9FB; border-radius: 6px; font-size: 12px;
+  }
+  .h-lead-row .hs { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
+  .h-lead-row .hn { flex: 1; font-weight: 600; color: #1B2A4A; }
+  .h-lead-row .hc { color: #999; }
+  .hdiff { font-size: 11px; font-weight: 700; }
+  .hdiff.new     { color: #1A7A4A; }
+  .hdiff.removed { color: #8B1A1A; }
+  .hdiff.up      { color: #1A7A4A; }
+  .hdiff.down    { color: #8B1A1A; }
+
+  /* ── Side panel ── */
+  .side-panel {
+    background: #fff; border-left: 1px solid #E0E4EA;
+    padding: 20px; display: flex; flex-direction: column; gap: 20px;
+  }
+  .chart-wrap { background: #F8F9FB; border-radius: 8px; padding: 14px; }
+  .chart-label { font-size: 12px; font-weight: 600; color: #555; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: .04em; }
+  .legend { display: flex; flex-direction: column; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .mkt-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .mkt-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; }
+
+  .how-to { background: #F0F7F4; border: 1px solid #C3E0D5; border-radius: 8px; padding: 14px; }
+  .how-to h3 { font-size: 12px; font-weight: 700; color: #0D6E6E; margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: .04em; }
+  .how-to ol { padding-left: 16px; }
+  .how-to li { font-size: 12px; color: #444; line-height: 1.7; }
+
+  .update-note {
+    background: #FFFBEB; border: 1px solid #F6D860; border-radius: 8px; padding: 12px 14px;
+  }
+  .update-note .un-title { font-size: 11px; font-weight: 700; color: #7A5800;
+    text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
+  .update-note p { font-size: 11px; color: #7A5800; line-height: 1.6; }
+  .update-note code { font-size: 10px; background: rgba(0,0,0,.06); padding: 1px 4px; border-radius: 3px; }
+
+  @media (max-width: 900px) {
+    .main { grid-template-columns: 1fr; }
+    .side-panel { border-left: none; border-top: 1px solid #E0E4EA; }
+    .summary { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ TOP BAR -->
+<div class="top-bar">
+  <div>
+    <div style="font-size:17px;font-weight:700;color:#fff;">Ross Energy — Sales Leads Pipeline</div>
+    <div class="meta">CCS · Geothermal · Oil &amp; Gas · European Market · Updated weekly</div>
+  </div>
+  <div class="logo">ROSS ENERGY</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ FILTERS -->
+<div class="controls">
+  <label>Market:</label>
+  <select id="fMkt" onchange="render()">
+    <option value="all">All markets</option>
+    <option value="CCS">CCS only</option>
+    <option value="Geothermal">Geothermal only</option>
+    <option value="Oil & Gas">Oil &amp; Gas only</option>
+  </select>
+  <label>Min score:</label>
+  <select id="fScore" onchange="render()">
+    <option value="0">All scores</option>
+    <option value="9">High priority (9+)</option>
+    <option value="7">Medium+ (7+)</option>
+  </select>
+  <label>Sort:</label>
+  <select id="fSort" onchange="render()">
+    <option value="score">Score ↓</option>
+    <option value="alpha">Company A–Z</option>
+    <option value="country">Country</option>
+  </select>
+  <input type="search" id="fSearch" placeholder="Search company, country, project…" oninput="render()">
+</div>
+
+<!-- ═══════════════════════════════════════════ SUMMARY -->
+<div class="summary" id="summary"></div>
+
+<!-- ═══════════════════════════════════════════ TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="setView('current')">Current Leads</button>
+  <button class="tab-btn" onclick="setView('history')">History</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ MAIN -->
+<div class="main">
+  <div class="left-col">
+
+    <!-- CURRENT LEADS VIEW -->
+    <div id="currentView">
+      <div class="leads-panel">
+        <div class="panel-title" id="panelTitle">All Leads</div>
+        <div id="leads"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY VIEW -->
+    <div id="historyView" class="history-panel">
+      <!-- rendered by renderHistory() -->
+    </div>
+
+  </div><!-- /left-col -->
+
+  <!-- SIDE PANEL -->
+  <div class="side-panel">
+    <div class="chart-wrap">
+      <div class="chart-label">Fit score by company</div>
+      <div style="position:relative;height:260px;">
+        <canvas id="chart" role="img" aria-label="Bar chart of fit scores"></canvas>
+      </div>
+    </div>
+
+    <div>
+      <div class="chart-label" style="margin-bottom:8px;">Score guide</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#1A7A4A;"></div>9–10 · High priority — contact now</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#B35900;"></div>7–8 · Medium — qualify this quarter</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8B1A1A;"></div>5–6 · Watch — monitor for trigger</div>
+      </div>
+      <div class="chart-label" style="margin-top:14px;margin-bottom:8px;">Market tags</div>
+      <div class="mkt-legend">
+        <div class="mkt-item"><span class="tag t-ccs">CCS</span> Carbon Capture &amp; Storage</div>
+        <div class="mkt-item"><span class="tag t-geo">Geothermal</span> Geothermal energy</div>
+        <div class="mkt-item"><span class="tag t-og">Oil &amp; Gas</span> Well mgmt · placements · casing</div>
+      </div>
+    </div>
+
+    <div class="update-note">
+      <div class="un-title">Weekly update guide</div>
+      <p>Each week: move current <code>LEADS</code> to a new entry at the top of <code>HISTORY</code> (with today's date), then replace <code>LEADS</code> with fresh research. History tab will populate automatically.</p>
+    </div>
+
+    <div class="how-to">
+      <h3>SharePoint setup (one-time)</h3>
+      <ol>
+        <li>Upload this file to a SharePoint Document Library</li>
+        <li>Edit your SharePoint page → add <strong>Embed</strong> web part</li>
+        <li>Paste: <code style="font-size:11px;">&lt;iframe src="FILE-URL" width="100%" height="900" frameborder="0"&gt;&lt;/iframe&gt;</code></li>
+        <li>Power Automate: file changes in OneDrive → copy to SharePoint → page refreshes automatically</li>
+      </ol>
+    </div>
+  </div><!-- /side-panel -->
+</div><!-- /main -->
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  HISTORY — weekly snapshots of past LEADS arrays.
+//  HOW TO UPDATE EACH WEEK:
+//    1. Copy the entire current LEADS array below.
+//    2. Add a new object at the TOP of HISTORY:
+//       { date:"YYYY-MM-DD", label:"Week of MMM D, YYYY", leads: [ ...paste here... ] }
+//    3. Replace the LEADS array with your new research.
+//    4. Save the file to OneDrive — History tab updates automatically.
+// ════════════════════════════════════════════════════════════
+const HISTORY = [
+  // ── Paste previous week snapshots here, newest first ──
+  // Example structure (uncomment & fill when updating):
+  // {
+  //   date: "2026-05-09",
+  //   label: "Week of May 9, 2026",
+  //   leads: [ ...copy of the LEADS array from that week... ]
+  // },
+];
+
+// ════════════════════════════════════════════════════════════
+//  CURRENT LEADS — replace this list each week.
+//  Last updated: 2026-05-09
+// ════════════════════════════════════════════════════════════
+const LEADS = [
+
+  // ── CCS ─────────────────────────────────────────────────
+
+  { company:"Storegga (Acorn CCS)", country:"UK / Scotland", market:"CCS",
+    project:"Acorn CCS & Hydrogen", stage:"Pre-FID → FID 2026", score:9,
+    trigger:"£200M UK government funding secured June 2025. Moving toward FID. Pure-play CCS developer (~50 people) with no in-house well engineering team.",
+    gap:"Small company. No internal well engineering. Relies entirely on consultants and partners for subsurface expertise.",
+    service:"Well engineering advisory · injection well design · subsurface reservoir analysis · operational framework",
+    contact:"VP Engineering / Technical Director. Lead with CCS well operations capability and proven track record.",
+    source:"https://pgjonline.com/news/2025/june/scotland-s-acorn-project-gets-272-million-boost" },
+
+  { company:"Arverne / Lithium de France", country:"France", market:"Geothermal",
+    project:"Lithium de France – Alsace Rhine Graben", stage:"Active drilling (Nov 2025–)", score:9,
+    trigger:"First geothermal drilling commenced Nov 2025. Two wells to 2,400 m depth. €40M funding. Equinor Ventures invested. Live operation needing well engineering support NOW.",
+    gap:"Startup with active drilling but no experienced well engineers for ongoing optimisation and reservoir management.",
+    service:"On-project well engineering · drilling supervision · subsurface data interpretation · capability building",
+    contact:"Head of Operations / CTO. Offer a well engineering retainer during the active drilling phase.",
+    source:"https://www.businesswire.com/news/home/20251124873358/en/Arverne-Launch-of-the-First-Geothermal-Drilling" },
+
+  { company:"EBN (Energie Beheer Nederland)", country:"Netherlands", market:"CCS",
+    project:"Porthos (2026) + Aramis (FID 2026)", stage:"Porthos ops 2026 · Aramis FID 2026", score:8,
+    trigger:"Co-developer of both Porthos (operational 2026) and Aramis (22 Mt/yr, FID 2026). Dutch state infrastructure entity, not a well engineering company.",
+    gap:"State infrastructure/finance entity. Very limited internal well operations and subsurface capability.",
+    service:"CCS injection well operations · subsurface reservoir monitoring · well integrity · team capability building",
+    contact:"EBN CCS Programme Director or Subsurface Manager. Position as a long-term knowledge partner.",
+    source:"https://www.aramis-ccs.com/news/aramis-takes-next-step-towards-investment-decision/" },
+
+  { company:"Hades Mining", country:"Germany", market:"Geothermal",
+    project:"Laser Drilling for Ultra-Deep Geothermal", stage:"Pre-commercial · first field ops 2026", score:8,
+    trigger:"€5.5M pre-seed Aug 2025 + €15M follow-on. 11 employees growing to 36. Deep-tech startup about to drill real wells with no conventional well engineering experience.",
+    gap:"Technology startup. Has laser drilling IP but zero conventional well engineering or drilling operations experience.",
+    service:"Well planning & engineering advisory · HSE & well control · operational framework for first well · regulatory navigation",
+    contact:"Founders / CTO. Position Ross as the 'conventional well engineering partner' that de-risks their first field operation.",
+    source:"https://www.eu-startups.com/2025/08/munich-based-hades-mining-raises-e5-5-million" },
+
+  { company:"INEOS E&P (Greensand)", country:"Denmark", market:"CCS",
+    project:"Greensand Future – EU's first CCS facility", stage:"Operational · scaling to 8 Mt/yr by 2030", score:8,
+    trigger:"EU's first operational CO₂ storage facility now live. Scaling 20× from 400 kt to 8 Mt/yr requires a major new well development programme.",
+    gap:"Chemicals/energy company operating CCS for the first time. Subsurface CCS expertise is entirely new territory.",
+    service:"Injection well design · well operations support · CCS operational framework · team training programme",
+    contact:"Greensand Project Director / VP Energy Transition. Focus on the scale-up phase and need for an independent well engineering partner.",
+    source:"https://www.ineos.com/news/shared-news/ineos-led-greensand-to-become-the-first-full-scale-co2-storage-facility" },
+
+  { company:"Canopus Drilling Solutions", country:"Netherlands", market:"Geothermal",
+    project:"DEPLOI Consortium – Steel Shot Drilling", stage:"R&D → first commercial projects", score:8,
+    trigger:"€3M+ raised. Part of DEPLOI consortium (EBN, Storengy, TU Munich, TNO). Moving toward commercial geothermal deployments.",
+    gap:"Drilling tech startup. Has novel technology but needs subsurface engineering and reservoir knowledge to deliver commercial wells.",
+    service:"Subsurface reservoir characterisation · well planning · geothermal well engineering advisory · project delivery support",
+    contact:"Founders / Head of Projects. Offer to be the subsurface engineering arm for their commercial deployments.",
+    source:"https://www.thinkgeoenergy.com/canopus-drilling-secures-eur-3-million-investment" },
+
+  { company:"Heidelberg Materials (CCS)", country:"Germany / Norway / UK", market:"CCS",
+    project:"Brevik (live) + UK / Bulgaria pipeline", stage:"Brevik operational · 3+ projects in development", score:7,
+    trigger:"First industrial CCS operational at Brevik. Pipeline of projects in UK, Sweden, Bulgaria. Industrial company (cement) expanding CCS across multiple countries.",
+    gap:"Cement manufacturer. CCS well operations entirely outside core competence. Multi-site scale-up needs sustained external expertise.",
+    service:"CCS well operations support · project-level subsurface engineering · multi-site training programmes",
+    contact:"Group CCS Director / Head of Sustainability. Frame around multi-country CCS ambition and scalable internal capability.",
+    source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
+
+  { company:"Eavor Technologies (Europe)", country:"Germany", market:"Geothermal",
+    project:"Geretsried + Second Loop (Mar 2026)", stage:"Loop 1 operational · Loop 2 drilling Mar 2026", score:7,
+    trigger:"First power to grid Dec 2025. Second loop drilling starting March 2026. Canadian company rapidly expanding European operations.",
+    gap:"Canadian HQ. European operations built on OMV partnership. Second loop creates need for local European well engineering support.",
+    service:"European regulatory advisory · subsurface support for Loop 2+ · local well engineering expertise",
+    contact:"Eavor Europe Operations Director. Emphasise local European regulatory and subsurface knowledge.",
+    source:"https://www.powermag.com/eavors-first-of-its-kind-closed-loop-geothermal-project-produces-grid-power-in-germany/" },
+
+  { company:"Stockholm Exergi (BECCS)", country:"Sweden", market:"CCS",
+    project:"BECCS Stockholm – 800 kt CO₂/yr", stage:"Under construction · operational 2028", score:7,
+    trigger:"Groundbreaking June 2025. Saipem building capture facility. District energy utility with zero CCS well operations experience. Long runway to 2028 = budget for capability building now.",
+    gap:"Energy utility. No CCS well operations knowledge. Entire capture and storage expertise must come from outside.",
+    service:"CCS readiness programme · well operations framework · pre-commissioning training for operations teams",
+    contact:"BECCS Programme Director / Head of Operations. Pitch a CCS operations readiness programme ahead of 2028 go-live.",
+    source:"https://www.stockholmexergi.se/en/beccs/" },
+
+  { company:"Hafslund Oslo Celsio", country:"Norway", market:"CCS",
+    project:"Klemetsrud Waste-to-Energy CCS", stage:"FID reached 2025 · development phase", score:7,
+    trigger:"FID reached 2025 with Microsoft CDR offtake contract. Norwegian district heating utility entering CCS operations for the first time.",
+    gap:"Urban energy utility. No CCS well operations expertise. Storage via Northern Lights adds complexity.",
+    service:"CCS subsurface advisory · operational framework · team capability building · well operations support",
+    contact:"CCS Project Lead / Technical Director. Offer a post-FID technical support package for the operations phase.",
+    source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
+
+  // ── OIL & GAS ───────────────────────────────────────────
+
+  { company:"Longboat Energy", country:"Norway / UK", market:"Oil & Gas",
+    project:"Kveikje & Cambozola Exploration Wells 2026", stage:"Active exploration drilling", score:9,
+    trigger:"Small Norwegian-listed E&P with active 2026 North Sea exploration drilling programme. Only ~15 employees — entirely dependent on external consultants for all well engineering, casing design, and drilling supervision.",
+    gap:"No in-house well engineering capability. Every well requires full outsourcing: well planning, casing design, drilling supervision, and post-well reporting.",
+    service:"Full well engineering package · casing design · drilling supervision · single well placements · post-well analysis",
+    contact:"CEO / Technical Director. Offer a complete outsourced well engineering solution for the active 2026 exploration programme.",
+    source:"https://www.longboatenergy.com" },
+
+  { company:"Ithaca Energy", country:"UK", market:"Oil & Gas",
+    project:"North Sea Portfolio – Post-Eni UK Merger Integration", stage:"Integration · active drilling 2026", score:8,
+    trigger:"Post-merger with Eni's UK E&P portfolio (2024), Ithaca now operates ~100 kboe/d across an enlarged, complex asset base. Merging two engineering teams has created resource gaps in well management and casing design review across the enlarged portfolio.",
+    gap:"Rapid portfolio growth through acquisition. Well engineering and casing design capacity stretched across significantly more assets. Integration gaps create demand for supplementary expert resource.",
+    service:"Well management support · casing design review · single well engineering placements · drilling programme oversight",
+    contact:"VP Wells or Drilling Manager. Lead with merger integration support and the ability to rapidly deploy well engineering expertise across the expanded portfolio.",
+    source:"https://www.ithacaenergy.com" },
+
+  { company:"Serica Energy", country:"UK", market:"Oil & Gas",
+    project:"Bruce, Keith & Rhum Fields – Infill Drilling", stage:"Ongoing production & infill drilling", score:8,
+    trigger:"Mid-size North Sea operator managing multiple mature fields with a deliberately lean internal team (~80 staff total). Serica operates a highly outsourced model for technical services — well engineering consulting fits directly into their procurement approach.",
+    gap:"Small engineering team managing a complex multi-field portfolio. Regularly procures external expertise for casing design, well integrity assessment, and single well management assignments.",
+    service:"Well management retainer · casing design · well integrity assessments · single well engineering placements",
+    contact:"Head of Wells / Technical Director. Pitch as a flexible, expert-on-demand well engineering partner perfectly suited to their lean operations model.",
+    source:"https://www.serica-energy.com" },
+
+  { company:"Spirit Energy", country:"Netherlands / UK", market:"Oil & Gas",
+    project:"Chiswick & Dutch North Sea – Late-Life Operations", stage:"Late-life ops & decommissioning prep", score:7,
+    trigger:"Centrica's E&P subsidiary managing late-life assets in UK and Netherlands. Internal headcount has reduced significantly in recent years, making external well engineering support — particularly for P&A casing design and well integrity — a regular procurement.",
+    gap:"Downsizing internal capability as assets mature. Well engineering for late-life integrity, P&A design, and decommissioning preparation is consistently outsourced to specialist consultants.",
+    service:"Well integrity engineering · late-life well management · casing design for P&A operations · single placements for specialist roles",
+    contact:"Wells Manager or Asset Director. Position Ross as a trusted late-life well engineering partner across UK and Dutch assets.",
+    source:"https://www.spiritenergy.co.uk" },
+
+  { company:"CNOOC International (UK)", country:"UK / North Sea", market:"Oil & Gas",
+    project:"Buzzard Field Operations & Development Drilling", stage:"Ongoing operations & development", score:7,
+    trigger:"Chinese NOC operating large UK North Sea assets (including Buzzard field) with limited local UKCS engineering capability. North Sea well engineering norms, regulatory requirements, and casing design standards require specialist local expertise that differs significantly from Chinese domestic practice.",
+    gap:"Strong Chinese engineering base but limited UKCS-specific well engineering knowledge. North Sea casing design, regulatory compliance with NSTA/HSE, and well operations standards require specialist UKCS consultants.",
+    service:"UKCS well engineering advisory · casing design reviews · regulatory compliance support · single placements for Wells team",
+    contact:"UK Technical Manager or Wells Superintendent. Lead with UKCS regulatory expertise, North Sea casing design experience, and ability to bridge Chinese NOC working practices with UK requirements.",
+    source:"https://www.cnoocltd.com" },
+
+]; // ← end of LEADS array
+
+// ════════════════════════════════════════════════════════════
+//  APP STATE & HELPERS
+// ════════════════════════════════════════════════════════════
+let openId       = null;
+let openHistId   = null;
+let chartInst    = null;
+
+function scoreClass(s){ return s>=9?'s-high':s>=7?'s-mid':'s-low'; }
+
+function marketTag(m){
+  if(m==='CCS')       return '<span class="tag t-ccs">CCS</span>';
+  if(m==='Geothermal')return '<span class="tag t-geo">Geothermal</span>';
+  return '<span class="tag t-og">Oil &amp; Gas</span>';
+}
+
+function filtered(){
+  const mkt  = document.getElementById('fMkt').value;
+  const minS = +document.getElementById('fScore').value;
+  const sort = document.getElementById('fSort').value;
+  const q    = document.getElementById('fSearch').value.toLowerCase();
+  let arr = LEADS.filter(l => {
+    if(mkt !== 'all' && l.market !== mkt) return false;
+    if(l.score < minS) return false;
+    if(q && !JSON.stringify(l).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if(sort==='score') arr.sort((a,b)=>b.score-a.score);
+  else if(sort==='alpha') arr.sort((a,b)=>a.company.localeCompare(b.company));
+  else arr.sort((a,b)=>a.country.localeCompare(b.country));
+  return arr;
+}
+
+// ════════════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ════════════════════════════════════════════════════════════
+function setView(v){
+  const isCurrent = v === 'current';
+  document.getElementById('currentView').style.display = isCurrent ? '' : 'none';
+  const hp = document.getElementById('historyView');
+  hp.style.display = isCurrent ? 'none' : 'block';
+  hp.classList.toggle('visible', !isCurrent);
+  document.querySelectorAll('.tab-btn').forEach((b,i) =>
+    b.classList.toggle('active', i === (isCurrent ? 0 : 1)));
+  if(!isCurrent) renderHistory();
+}
+
+// ════════════════════════════════════════════════════════════
+//  CURRENT LEADS RENDER
+// ════════════════════════════════════════════════════════════
+function render(){
+  const arr  = filtered();
+  const hi   = LEADS.filter(l=>l.score>=9).length;
+  const ccs  = LEADS.filter(l=>l.market==='CCS').length;
+  const geo  = LEADS.filter(l=>l.market==='Geothermal').length;
+  const og   = LEADS.filter(l=>l.market==='Oil & Gas').length;
+  const avg  = arr.length ? (arr.reduce((s,l)=>s+l.score,0)/arr.length).toFixed(1) : '—';
+
+  document.getElementById('summary').innerHTML = `
+    <div class="metric">
+      <div class="lbl">Total leads</div>
+      <div class="val">${LEADS.length}</div>
+      <div class="sub">current pipeline</div>
+    </div>
+    <div class="metric">
+      <div class="lbl">High priority</div>
+      <div class="val">${hi}</div>
+      <div class="sub">score 9 or above</div>
+    </div>
+    <div class="metric">
+      <div class="lbl">By market</div>
+      <div class="val small">${ccs} CCS &nbsp;·&nbsp; ${geo} Geo<br>${og} Oil &amp; Gas</div>
+    </div>
+    <div class="metric">
+      <div class="lbl">Avg fit score</div>
+      <div class="val">${avg}</div>
+      <div class="sub">filtered view · out of 10</div>
+    </div>`;
+
+  document.getElementById('panelTitle').textContent =
+    `${arr.length} Lead${arr.length!==1?'s':''}`;
+
+  const el = document.getElementById('leads');
+  if(!arr.length){
+    el.innerHTML='<div class="no-results">No leads match the current filters.</div>';
+    updateChart(arr); return;
+  }
+
+  el.innerHTML = arr.map(l => {
+    const isOpen = openId === l.company;
+    const safe = l.company.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    return `<div class="card${isOpen?' open':''}" onclick="toggle('${safe}')">
+      <div class="card-head">
+        <div class="score ${scoreClass(l.score)}">${l.score}</div>
+        <div class="card-info">
+          <div class="name">${l.company}</div>
+          <div class="sub">${l.country} &middot; ${l.project}</div>
+        </div>
+        <div class="tags">${marketTag(l.market)}<span class="tag t-stage">${l.stage}</span></div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="card-body">
+        <div class="trigger"><strong>Trigger event</strong>${l.trigger}</div>
+        <div class="detail-grid">
+          <div class="dbox"><div class="dlbl">Capability gap</div><div class="dval">${l.gap}</div></div>
+          <div class="dbox"><div class="dlbl">Recommended services</div><div class="dval">${l.service}</div></div>
+          <div class="dbox full"><div class="dlbl">Contact angle</div><div class="dval">${l.contact}</div></div>
+        </div>
+        <a class="src-link" href="${l.source}" target="_blank">&#8594; Source / Company website</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  updateChart(arr);
+}
+
+function toggle(company){
+  openId = openId === company ? null : company;
+  render();
+}
+
+function updateChart(arr){
+  const ctx = document.getElementById('chart').getContext('2d');
+  const colors = arr.map(l => l.score>=9 ? '#1A7A4A' : l.score>=7 ? '#B35900' : '#8B1A1A');
+  if(chartInst) chartInst.destroy();
+  chartInst = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: arr.map(l => l.company.length>16 ? l.company.slice(0,16)+'…' : l.company),
+      datasets:[{ label:'Fit score', data:arr.map(l=>l.score), backgroundColor:colors, borderRadius:4 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label:c=>` Score: ${c.parsed.y}/10 · ${arr[c.dataIndex].market}`}}},
+      scales:{
+        y:{min:0, max:10, ticks:{stepSize:2, font:{size:10}}, grid:{color:'rgba(0,0,0,.06)'}},
+        x:{ticks:{font:{size:10}, maxRotation:45, autoSkip:false}}
+      }
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+//  HISTORY RENDER
+// ════════════════════════════════════════════════════════════
+function renderHistory(){
+  const el = document.getElementById('historyView');
+
+  if(!HISTORY.length){
+    el.innerHTML = `
+      <div class="panel-title">Pipeline History</div>
+      <div class="history-empty">
+        <div class="icon">🕒</div>
+        <h3>No history yet — first update coming soon</h3>
+        <p>Each time you update the dashboard, the previous week's leads are preserved here automatically. You'll be able to track which companies were added, removed, or scored differently over time.</p>
+        <p>Current snapshot: <strong>Week of May 9, 2026</strong> &nbsp;·&nbsp; ${LEADS.length} leads</p>
+        <p style="margin-top:10px;">To add history after your next update, copy the current <code>LEADS</code> array into a new <code>HISTORY</code> entry — see the comment at the top of the script.</p>
+      </div>`;
+    return;
+  }
+
+  // Sort newest first
+  const sorted = [...HISTORY].sort((a,b) => b.date.localeCompare(a.date));
+
+  const entries = sorted.map((snap, idx) => {
+    const isOpen = openHistId === snap.date;
+
+    // Compare this snapshot to current LEADS
+    const snapSet = new Map(snap.leads.map(l=>[l.company, l]));
+    const currSet = new Map(LEADS.map(l=>[l.company, l]));
+    const newLeads     = LEADS.filter(l => !snapSet.has(l.company));
+    const removedLeads = snap.leads.filter(l => !currSet.has(l.company));
+    const changedLeads = snap.leads.filter(l => {
+      const c = currSet.get(l.company);
+      return c && c.score !== l.score;
+    });
+
+    const hi  = snap.leads.filter(l=>l.score>=9).length;
+    const ccs = snap.leads.filter(l=>l.market==='CCS').length;
+    const geo = snap.leads.filter(l=>l.market==='Geothermal').length;
+    const og  = snap.leads.filter(l=>l.market==='Oil & Gas').length;
+
+    const changeChips = [
+      newLeads.length     ? `<span class="chip chip-new">+${newLeads.length} new since this snapshot</span>` : '',
+      removedLeads.length ? `<span class="chip chip-removed">−${removedLeads.length} removed since</span>` : '',
+      changedLeads.length ? `<span class="chip chip-changed">${changedLeads.length} score changed</span>` : '',
+      (!newLeads.length && !removedLeads.length && !changedLeads.length)
+        ? `<span class="chip chip-same">No changes from current pipeline</span>` : ''
+    ].join('');
+
+    const leadRows = snap.leads.map(l => {
+      const curr   = currSet.get(l.company);
+      const diff   = curr ? curr.score - l.score : null;
+      const status = !curr ? 'removed' : diff > 0 ? 'up' : diff < 0 ? 'down' : '';
+      return `<div class="h-lead-row">
+        <div class="hs ${scoreClass(l.score)}">${l.score}</div>
+        <div class="hn">${l.company}</div>
+        <div class="hc">${l.country}</div>
+        ${marketTag(l.market)}
+        ${status==='removed' ? '<span class="hdiff removed">removed</span>' : ''}
+        ${status==='up'      ? `<span class="hdiff up">↑${diff} now</span>` : ''}
+        ${status==='down'    ? `<span class="hdiff down">↓${Math.abs(diff)} now</span>` : ''}
+      </div>`;
+    }).join('');
+
+    const safe = snap.date.replace(/"/g,'');
+    return `<div class="h-entry${isOpen?' open':''}">
+      <div class="h-entry-head" onclick="toggleHist('${safe}')">
+        <div>
+          <div class="date-label">${snap.label}</div>
+          <div class="date-meta">${snap.leads.length} leads total · ${hi} high priority</div>
+        </div>
+        <div class="h-stats">
+          <span class="h-stat">${ccs} CCS</span>
+          <span class="h-stat">${geo} Geo</span>
+          ${og ? `<span class="h-stat">${og} O&amp;G</span>` : ''}
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="h-entry-body">
+        <div class="changes-bar">${changeChips}</div>
+        <div class="h-lead-list">${leadRows}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="panel-title">Pipeline History (${sorted.length} snapshot${sorted.length!==1?'s':''})</div>
+    <div class="history-timeline">${entries}</div>`;
+}
+
+function toggleHist(date){
+  openHistId = openHistId === date ? null : date;
+  renderHistory();
+}
+
+// ── Boot ──
+render();
+</script>
+</body>
+</html>
