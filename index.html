@@ -199,7 +199,7 @@
 <div class="top-bar">
   <div>
     <div style="font-size:17px;font-weight:700;color:#fff;">Ross Energy — Sales Leads Pipeline</div>
-    <div class="meta">CCS · Geothermal · Oil &amp; Gas · European Market · Updated weekly</div>
+    <div class="meta">CCS · Geothermal · Oil &amp; Gas · European Market · Updated June 12, 2026</div>
   </div>
   <div class="logo">ROSS ENERGY</div>
 </div>
@@ -308,30 +308,159 @@
 //    4. Save the file to OneDrive — History tab updates automatically.
 // ════════════════════════════════════════════════════════════
 const HISTORY = [
-  // ── Paste previous week snapshots here, newest first ──
-  // Example structure (uncomment & fill when updating):
-  // {
-  //   date: "2026-05-09",
-  //   label: "Week of May 9, 2026",
-  //   leads: [ ...copy of the LEADS array from that week... ]
-  // },
+  {
+    date: "2026-05-19",
+    label: "Week of May 19, 2026",
+    leads: [
+      { company:"Storegga (Acorn CCS)", country:"UK / Scotland", market:"CCS", project:"Acorn CCS & Hydrogen", stage:"Pre-FID → FID 2026", score:9, trigger:"£200M UK government funding secured June 2025. Moving toward FID. Pure-play CCS developer (~50 people) with no in-house well engineering team.", gap:"Small company. No internal well engineering. Relies entirely on consultants and partners for subsurface expertise.", service:"Well engineering advisory · injection well design · subsurface reservoir analysis · operational framework", contact:"VP Engineering / Technical Director. Lead with CCS well operations capability and proven track record.", source:"https://pgjonline.com/news/2025/june/scotland-s-acorn-project-gets-272-million-boost" },
+      { company:"Arverne / Lithium de France", country:"France", market:"Geothermal", project:"Lithium de France – Alsace Rhine Graben", stage:"Active drilling (Nov 2025–)", score:9, trigger:"First geothermal drilling commenced Nov 2025. Two wells to 2,400 m depth. €40M funding. Equinor Ventures invested.", gap:"Startup with active drilling but no experienced well engineers for ongoing optimisation and reservoir management.", service:"On-project well engineering · drilling supervision · subsurface data interpretation · capability building", contact:"Head of Operations / CTO. Offer a well engineering retainer during the active drilling phase.", source:"https://www.businesswire.com/news/home/20251124873358/en/Arverne-Launch-of-the-First-Geothermal-Drilling" },
+      { company:"EnEarth (Energean – Prinos CO₂)", country:"Greece", market:"CCS", project:"Prinos CO₂ Storage – SE Europe's first CCS facility", stage:"First drilling 2026 · 15-well programme", score:9, trigger:"Drilling of first CCS injection wells starting 2026. €270M EU Innovation Fund grant. 15-well programme (6 injection, 9 water production).", gap:"E&P company entering dedicated CO₂ storage for the first time. No in-house CCS well engineering capability.", service:"CCS injection well design · drilling supervision · well operations framework · reservoir monitoring", contact:"EnEarth CEO / Technical Director. Lead with CCS injection well design and 15-well programme support.", source:"https://www.enearth.earth/what-we-do" },
+      { company:"Longboat Energy", country:"Norway / UK", market:"Oil & Gas", project:"Kveikje & Cambozola Exploration Wells 2026", stage:"Active exploration drilling", score:9, trigger:"Small Norwegian-listed E&P with active 2026 North Sea exploration drilling programme. Only ~15 employees.", gap:"No in-house well engineering capability. Every well requires full outsourcing.", service:"Full well engineering package · casing design · drilling supervision · single well placements · post-well analysis", contact:"CEO / Technical Director. Offer a complete outsourced well engineering solution for the active 2026 exploration programme.", source:"https://www.longboatenergy.com" },
+      { company:"EBN (Energie Beheer Nederland)", country:"Netherlands", market:"CCS", project:"Porthos (2026) + Aramis (FID 2026)", stage:"Porthos ops 2026 · Aramis FID 2026", score:8, trigger:"Co-developer of both Porthos (operational 2026) and Aramis (22 Mt/yr, FID 2026). Dutch state entity.", gap:"State infrastructure/finance entity. Very limited internal well operations and subsurface capability.", service:"CCS injection well operations · subsurface reservoir monitoring · well integrity · team capability building", contact:"EBN CCS Programme Director or Subsurface Manager. Position as a long-term knowledge partner.", source:"https://www.aramis-ccs.com/news/aramis-takes-next-step-towards-investment-decision/" },
+      { company:"Hades Mining", country:"Germany", market:"Geothermal", project:"Laser Drilling for Ultra-Deep Geothermal", stage:"Pre-commercial · first field ops 2026", score:8, trigger:"€5.5M pre-seed Aug 2025 + €15M follow-on. Deep-tech startup about to drill real wells with no conventional well engineering experience.", gap:"Technology startup. Has laser drilling IP but zero conventional well engineering or drilling operations experience.", service:"Well planning & engineering advisory · HSE & well control · operational framework for first well · regulatory navigation", contact:"Founders / CTO. Position Ross as the 'conventional well engineering partner' that de-risks their first field operation.", source:"https://www.eu-startups.com/2025/08/munich-based-hades-mining-raises-e5-5-million" },
+      { company:"INEOS E&P (Greensand)", country:"Denmark", market:"CCS", project:"Greensand Future – EU's first CCS facility", stage:"Operational · scaling to 8 Mt/yr by 2030", score:8, trigger:"EU's first operational CO₂ storage facility now live. Scaling 20× from 400 kt to 8 Mt/yr requires a major new well development programme.", gap:"Chemicals/energy company operating CCS for the first time. Subsurface CCS expertise is entirely new territory.", service:"Injection well design · well operations support · CCS operational framework · team training programme", contact:"Greensand Project Director / VP Energy Transition. Focus on the scale-up phase.", source:"https://www.ineos.com/news/shared-news/ineos-led-greensand-to-become-the-first-full-scale-co2-storage-facility" },
+      { company:"Canopus Drilling Solutions", country:"Netherlands", market:"Geothermal", project:"DEPLOI Consortium – Steel Shot Drilling", stage:"R&D → first commercial projects", score:8, trigger:"€3M+ raised. Part of DEPLOI consortium (EBN, Storengy, TU Munich, TNO). Moving toward commercial geothermal deployments.", gap:"Drilling tech startup. Has novel technology but needs subsurface engineering and reservoir knowledge to deliver commercial wells.", service:"Subsurface reservoir characterisation · well planning · geothermal well engineering advisory · project delivery support", contact:"Founders / Head of Projects. Offer to be the subsurface engineering arm for their commercial deployments.", source:"https://www.thinkgeoenergy.com/canopus-drilling-secures-eur-3-million-investment" },
+      { company:"GA Drilling", country:"Slovakia / Netherlands", market:"Geothermal", project:"Deep Geothermal – Netherlands 6 km Well 2026", stage:"First commercial well negotiations 2026", score:8, trigger:"In talks to drill a 6 km well in the Netherlands in 2026 — potentially Europe's deepest geothermal well. Plasma drilling startup moving from R&D to first commercial deployment.", gap:"Plasma drilling technology startup. Needs conventional well engineering for planning, casing design, and regulatory compliance.", service:"Well planning & engineering advisory · casing design for deep well · HSE & well control framework · Dutch regulatory navigation", contact:"CEO / Head of Projects. Position Ross as the conventional well engineering partner.", source:"https://www.gadrilling.com/" },
+      { company:"Ithaca Energy", country:"UK", market:"Oil & Gas", project:"North Sea Portfolio – Post-Eni UK Merger Integration", stage:"Integration · active drilling 2026", score:8, trigger:"Post-merger with Eni's UK E&P portfolio (2024). Well engineering capacity stretched across significantly more assets.", gap:"Rapid portfolio growth through acquisition. Integration gaps create demand for supplementary expert resource.", service:"Well management support · casing design review · single well engineering placements · drilling programme oversight", contact:"VP Wells or Drilling Manager. Lead with merger integration support.", source:"https://www.ithacaenergy.com" },
+      { company:"Serica Energy", country:"UK", market:"Oil & Gas", project:"Bruce, Keith & Rhum Fields – Infill Drilling", stage:"Ongoing production & infill drilling", score:8, trigger:"Mid-size North Sea operator with lean internal team (~80 staff). Operates a highly outsourced model for technical services.", gap:"Small engineering team managing a complex multi-field portfolio. Regularly procures external well engineering expertise.", service:"Well management retainer · casing design · well integrity assessments · single well engineering placements", contact:"Head of Wells / Technical Director. Pitch as a flexible, expert-on-demand well engineering partner.", source:"https://www.serica-energy.com" },
+      { company:"Heidelberg Materials (CCS)", country:"Germany / Norway / UK", market:"CCS", project:"Brevik (live) + UK / Bulgaria pipeline", stage:"Brevik operational · 3+ projects in development", score:7, trigger:"First industrial CCS operational at Brevik. Pipeline of projects in UK, Sweden, Bulgaria.", gap:"Cement manufacturer. CCS well operations entirely outside core competence.", service:"CCS well operations support · project-level subsurface engineering · multi-site training programmes", contact:"Group CCS Director / Head of Sustainability. Frame around multi-country CCS ambition.", source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
+      { company:"Eavor Technologies (Europe)", country:"Germany", market:"Geothermal", project:"Geretsried + Second Loop (Mar 2026)", stage:"Loop 1 operational · Loop 2 drilling Mar 2026", score:7, trigger:"First power to grid Dec 2025. Second loop drilling starting March 2026. Canadian company rapidly expanding European operations.", gap:"Canadian HQ. European operations built on OMV partnership. Second loop creates need for local European well engineering support.", service:"European regulatory advisory · subsurface support for Loop 2+ · local well engineering expertise", contact:"Eavor Europe Operations Director. Emphasise local European regulatory and subsurface knowledge.", source:"https://www.powermag.com/eavors-first-of-its-kind-closed-loop-geothermal-project-produces-grid-power-in-germany/" },
+      { company:"Stockholm Exergi (BECCS)", country:"Sweden", market:"CCS", project:"BECCS Stockholm – 800 kt CO₂/yr", stage:"Under construction · operational 2028", score:7, trigger:"Groundbreaking June 2025. Saipem building capture facility. District energy utility with zero CCS well operations experience.", gap:"Energy utility. No CCS well operations knowledge. Entire capture and storage expertise must come from outside.", service:"CCS readiness programme · well operations framework · pre-commissioning training for operations teams", contact:"BECCS Programme Director / Head of Operations. Pitch a CCS operations readiness programme ahead of 2028 go-live.", source:"https://www.stockholmexergi.se/en/beccs/" },
+      { company:"Hafslund Oslo Celsio", country:"Norway", market:"CCS", project:"Klemetsrud Waste-to-Energy CCS", stage:"FID reached 2025 · development phase", score:7, trigger:"FID reached 2025 with Microsoft CDR offtake contract. Norwegian district heating utility entering CCS operations for the first time.", gap:"Urban energy utility. No CCS well operations expertise. Storage via Northern Lights adds complexity.", service:"CCS subsurface advisory · operational framework · team capability building · well operations support", contact:"CCS Project Lead / Technical Director. Offer a post-FID technical support package for the operations phase.", source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
+      { company:"Spirit Energy", country:"Netherlands / UK", market:"Oil & Gas", project:"Chiswick & Dutch North Sea – Late-Life Operations", stage:"Late-life ops & decommissioning prep", score:7, trigger:"Centrica's E&P subsidiary managing late-life assets. Internal headcount reduced significantly. P&A casing design and well integrity procurement a regular need.", gap:"Downsizing internal capability as assets mature. Well engineering for late-life integrity is consistently outsourced.", service:"Well integrity engineering · late-life well management · casing design for P&A operations · single placements", contact:"Wells Manager or Asset Director. Position Ross as a trusted late-life well engineering partner.", source:"https://www.spiritenergy.co.uk" },
+      { company:"CNOOC International (UK)", country:"UK / North Sea", market:"Oil & Gas", project:"Buzzard Field Operations & Development Drilling", stage:"Ongoing operations & development", score:7, trigger:"Chinese NOC operating large UK North Sea assets with limited local UKCS engineering capability.", gap:"Strong Chinese engineering base but limited UKCS-specific well engineering knowledge.", service:"UKCS well engineering advisory · casing design reviews · regulatory compliance support · single placements for Wells team", contact:"UK Technical Manager or Wells Superintendent. Lead with UKCS regulatory expertise.", source:"https://www.cnoocltd.com" },
+      { company:"Yara Sluiskil (CCS)", country:"Netherlands", market:"CCS", project:"Sluiskil CCS – World's First Cross-Border CCS Operation", stage:"Operational 2026 · 800 kt CO₂/yr", score:7, trigger:"World's first cross-border CCS project now operational. 800,000 t CO₂/yr captured at fertilizer plant and stored via Northern Lights. 15-year operation ahead.", gap:"Fertilizer/chemicals manufacturer. Entire CCS injection and storage operation is outside core competence.", service:"CCS operations advisory · independent technical assurance · injection well programme oversight · team capability building", contact:"Head of CCS / Sustainability Director. Offer long-term CCS technical advisory.", source:"https://www.yara.com/sustainability/transforming-food-system/carbon-capture-and-storage/" },
+      { company:"DESFA (APOLLOCO₂)", country:"Greece", market:"CCS", project:"APOLLOCO₂ – SE European CCS Transport & Storage Hub", stage:"Development · storage ops 2026–2027", score:7, trigger:"€169M EU Innovation Fund secured. $4.2B total programme value. Greece's first CCS midstream hub. DESFA is a gas TSO with no CCS subsurface or well operations experience.", gap:"Gas transmission system operator. CCS subsurface storage and injection well operations are entirely new territory.", service:"CCS storage well advisory · subsurface characterisation · injection well operations framework · team training", contact:"APOLLOCO₂ Project Director / Technical Manager. Frame as the independent CCS subsurface expert.", source:"https://www.desfa.gr/en/innovation-green-gases/participation-in-projects-2/prinos-offshore-storage-at-prinos-field-for-emissions-from-el-by-pipeline-and-from-bg-hr-cy-el-it-and-si-by-ship/" }
+    ]
+  },
+  {
+    date: "2026-05-09",
+    label: "Week of May 9, 2026",
+    leads: [
+      { company:"Storegga (Acorn CCS)", country:"UK / Scotland", market:"CCS",
+        project:"Acorn CCS & Hydrogen", stage:"Pre-FID → FID 2026", score:9,
+        trigger:"£200M UK government funding secured June 2025. Moving toward FID. Pure-play CCS developer (~50 people) with no in-house well engineering team.",
+        gap:"Small company. No internal well engineering. Relies entirely on consultants and partners for subsurface expertise.",
+        service:"Well engineering advisory · injection well design · subsurface reservoir analysis · operational framework",
+        contact:"VP Engineering / Technical Director. Lead with CCS well operations capability and proven track record.",
+        source:"https://pgjonline.com/news/2025/june/scotland-s-acorn-project-gets-272-million-boost" },
+      { company:"Arverne / Lithium de France", country:"France", market:"Geothermal",
+        project:"Lithium de France – Alsace Rhine Graben", stage:"Active drilling (Nov 2025–)", score:9,
+        trigger:"First geothermal drilling commenced Nov 2025. Two wells to 2,400 m depth. €40M funding. Equinor Ventures invested. Live operation needing well engineering support NOW.",
+        gap:"Startup with active drilling but no experienced well engineers for ongoing optimisation and reservoir management.",
+        service:"On-project well engineering · drilling supervision · subsurface data interpretation · capability building",
+        contact:"Head of Operations / CTO. Offer a well engineering retainer during the active drilling phase.",
+        source:"https://www.businesswire.com/news/home/20251124873358/en/Arverne-Launch-of-the-First-Geothermal-Drilling" },
+      { company:"EBN (Energie Beheer Nederland)", country:"Netherlands", market:"CCS",
+        project:"Porthos (2026) + Aramis (FID 2026)", stage:"Porthos ops 2026 · Aramis FID 2026", score:8,
+        trigger:"Co-developer of both Porthos (operational 2026) and Aramis (22 Mt/yr, FID 2026). Dutch state infrastructure entity, not a well engineering company.",
+        gap:"State infrastructure/finance entity. Very limited internal well operations and subsurface capability.",
+        service:"CCS injection well operations · subsurface reservoir monitoring · well integrity · team capability building",
+        contact:"EBN CCS Programme Director or Subsurface Manager. Position as a long-term knowledge partner.",
+        source:"https://www.aramis-ccs.com/news/aramis-takes-next-step-towards-investment-decision/" },
+      { company:"Hades Mining", country:"Germany", market:"Geothermal",
+        project:"Laser Drilling for Ultra-Deep Geothermal", stage:"Pre-commercial · first field ops 2026", score:8,
+        trigger:"€5.5M pre-seed Aug 2025 + €15M follow-on. 11 employees growing to 36. Deep-tech startup about to drill real wells with no conventional well engineering experience.",
+        gap:"Technology startup. Has laser drilling IP but zero conventional well engineering or drilling operations experience.",
+        service:"Well planning & engineering advisory · HSE & well control · operational framework for first well · regulatory navigation",
+        contact:"Founders / CTO. Position Ross as the 'conventional well engineering partner' that de-risks their first field operation.",
+        source:"https://www.eu-startups.com/2025/08/munich-based-hades-mining-raises-e5-5-million" },
+      { company:"INEOS E&P (Greensand)", country:"Denmark", market:"CCS",
+        project:"Greensand Future – EU's first CCS facility", stage:"Operational · scaling to 8 Mt/yr by 2030", score:8,
+        trigger:"EU's first operational CO₂ storage facility now live. Scaling 20× from 400 kt to 8 Mt/yr requires a major new well development programme.",
+        gap:"Chemicals/energy company operating CCS for the first time. Subsurface CCS expertise is entirely new territory.",
+        service:"Injection well design · well operations support · CCS operational framework · team training programme",
+        contact:"Greensand Project Director / VP Energy Transition. Focus on the scale-up phase and need for an independent well engineering partner.",
+        source:"https://www.ineos.com/news/shared-news/ineos-led-greensand-to-become-the-first-full-scale-co2-storage-facility" },
+      { company:"Canopus Drilling Solutions", country:"Netherlands", market:"Geothermal",
+        project:"DEPLOI Consortium – Steel Shot Drilling", stage:"R&D → first commercial projects", score:8,
+        trigger:"€3M+ raised. Part of DEPLOI consortium (EBN, Storengy, TU Munich, TNO). Moving toward commercial geothermal deployments.",
+        gap:"Drilling tech startup. Has novel technology but needs subsurface engineering and reservoir knowledge to deliver commercial wells.",
+        service:"Subsurface reservoir characterisation · well planning · geothermal well engineering advisory · project delivery support",
+        contact:"Founders / Head of Projects. Offer to be the subsurface engineering arm for their commercial deployments.",
+        source:"https://www.thinkgeoenergy.com/canopus-drilling-secures-eur-3-million-investment" },
+      { company:"Heidelberg Materials (CCS)", country:"Germany / Norway / UK", market:"CCS",
+        project:"Brevik (live) + UK / Bulgaria pipeline", stage:"Brevik operational · 3+ projects in development", score:7,
+        trigger:"First industrial CCS operational at Brevik. Pipeline of projects in UK, Sweden, Bulgaria. Industrial company (cement) expanding CCS across multiple countries.",
+        gap:"Cement manufacturer. CCS well operations entirely outside core competence. Multi-site scale-up needs sustained external expertise.",
+        service:"CCS well operations support · project-level subsurface engineering · multi-site training programmes",
+        contact:"Group CCS Director / Head of Sustainability. Frame around multi-country CCS ambition and scalable internal capability.",
+        source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
+      { company:"Eavor Technologies (Europe)", country:"Germany", market:"Geothermal",
+        project:"Geretsried + Second Loop (Mar 2026)", stage:"Loop 1 operational · Loop 2 drilling Mar 2026", score:7,
+        trigger:"First power to grid Dec 2025. Second loop drilling starting March 2026. Canadian company rapidly expanding European operations.",
+        gap:"Canadian HQ. European operations built on OMV partnership. Second loop creates need for local European well engineering support.",
+        service:"European regulatory advisory · subsurface support for Loop 2+ · local well engineering expertise",
+        contact:"Eavor Europe Operations Director. Emphasise local European regulatory and subsurface knowledge.",
+        source:"https://www.powermag.com/eavors-first-of-its-kind-closed-loop-geothermal-project-produces-grid-power-in-germany/" },
+      { company:"Stockholm Exergi (BECCS)", country:"Sweden", market:"CCS",
+        project:"BECCS Stockholm – 800 kt CO₂/yr", stage:"Under construction · operational 2028", score:7,
+        trigger:"Groundbreaking June 2025. Saipem building capture facility. District energy utility with zero CCS well operations experience. Long runway to 2028 = budget for capability building now.",
+        gap:"Energy utility. No CCS well operations knowledge. Entire capture and storage expertise must come from outside.",
+        service:"CCS readiness programme · well operations framework · pre-commissioning training for operations teams",
+        contact:"BECCS Programme Director / Head of Operations. Pitch a CCS operations readiness programme ahead of 2028 go-live.",
+        source:"https://www.stockholmexergi.se/en/beccs/" },
+      { company:"Hafslund Oslo Celsio", country:"Norway", market:"CCS",
+        project:"Klemetsrud Waste-to-Energy CCS", stage:"FID reached 2025 · development phase", score:7,
+        trigger:"FID reached 2025 with Microsoft CDR offtake contract. Norwegian district heating utility entering CCS operations for the first time.",
+        gap:"Urban energy utility. No CCS well operations expertise. Storage via Northern Lights adds complexity.",
+        service:"CCS subsurface advisory · operational framework · team capability building · well operations support",
+        contact:"CCS Project Lead / Technical Director. Offer a post-FID technical support package for the operations phase.",
+        source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
+      { company:"Longboat Energy", country:"Norway / UK", market:"Oil & Gas",
+        project:"Kveikje & Cambozola Exploration Wells 2026", stage:"Active exploration drilling", score:9,
+        trigger:"Small Norwegian-listed E&P with active 2026 North Sea exploration drilling programme. Only ~15 employees — entirely dependent on external consultants for all well engineering, casing design, and drilling supervision.",
+        gap:"No in-house well engineering capability. Every well requires full outsourcing: well planning, casing design, drilling supervision, and post-well reporting.",
+        service:"Full well engineering package · casing design · drilling supervision · single well placements · post-well analysis",
+        contact:"CEO / Technical Director. Offer a complete outsourced well engineering solution for the active 2026 exploration programme.",
+        source:"https://www.longboatenergy.com" },
+      { company:"Ithaca Energy", country:"UK", market:"Oil & Gas",
+        project:"North Sea Portfolio – Post-Eni UK Merger Integration", stage:"Integration · active drilling 2026", score:8,
+        trigger:"Post-merger with Eni's UK E&P portfolio (2024), Ithaca now operates ~100 kboe/d across an enlarged, complex asset base. Merging two engineering teams has created resource gaps in well management and casing design review across the enlarged portfolio.",
+        gap:"Rapid portfolio growth through acquisition. Well engineering and casing design capacity stretched across significantly more assets. Integration gaps create demand for supplementary expert resource.",
+        service:"Well management support · casing design review · single well engineering placements · drilling programme oversight",
+        contact:"VP Wells or Drilling Manager. Lead with merger integration support and the ability to rapidly deploy well engineering expertise across the expanded portfolio.",
+        source:"https://www.ithacaenergy.com" },
+      { company:"Serica Energy", country:"UK", market:"Oil & Gas",
+        project:"Bruce, Keith & Rhum Fields – Infill Drilling", stage:"Ongoing production & infill drilling", score:8,
+        trigger:"Mid-size North Sea operator managing multiple mature fields with a deliberately lean internal team (~80 staff total). Serica operates a highly outsourced model for technical services — well engineering consulting fits directly into their procurement approach.",
+        gap:"Small engineering team managing a complex multi-field portfolio. Regularly procures external expertise for casing design, well integrity assessment, and single well management assignments.",
+        service:"Well management retainer · casing design · well integrity assessments · single well engineering placements",
+        contact:"Head of Wells / Technical Director. Pitch as a flexible, expert-on-demand well engineering partner perfectly suited to their lean operations model.",
+        source:"https://www.serica-energy.com" },
+      { company:"Spirit Energy", country:"Netherlands / UK", market:"Oil & Gas",
+        project:"Chiswick & Dutch North Sea – Late-Life Operations", stage:"Late-life ops & decommissioning prep", score:7,
+        trigger:"Centrica's E&P subsidiary managing late-life assets in UK and Netherlands. Internal headcount has reduced significantly in recent years, making external well engineering support — particularly for P&A casing design and well integrity — a regular procurement.",
+        gap:"Downsizing internal capability as assets mature. Well engineering for late-life integrity, P&A design, and decommissioning preparation is consistently outsourced to specialist consultants.",
+        service:"Well integrity engineering · late-life well management · casing design for P&A operations · single placements for specialist roles",
+        contact:"Wells Manager or Asset Director. Position Ross as a trusted late-life well engineering partner across UK and Dutch assets.",
+        source:"https://www.spiritenergy.co.uk" },
+      { company:"CNOOC International (UK)", country:"UK / North Sea", market:"Oil & Gas",
+        project:"Buzzard Field Operations & Development Drilling", stage:"Ongoing operations & development", score:7,
+        trigger:"Chinese NOC operating large UK North Sea assets (including Buzzard field) with limited local UKCS engineering capability. North Sea well engineering norms, regulatory requirements, and casing design standards require specialist local expertise that differs significantly from Chinese domestic practice.",
+        gap:"Strong Chinese engineering base but limited UKCS-specific well engineering knowledge. North Sea casing design, regulatory compliance with NSTA/HSE, and well operations standards require specialist UKCS consultants.",
+        service:"UKCS well engineering advisory · casing design reviews · regulatory compliance support · single placements for Wells team",
+        contact:"UK Technical Manager or Wells Superintendent. Lead with UKCS regulatory expertise, North Sea casing design experience, and ability to bridge Chinese NOC working practices with UK requirements.",
+        source:"https://www.cnoocltd.com" }
+    ]
+  }
 ];
 
 // ════════════════════════════════════════════════════════════
 //  CURRENT LEADS — replace this list each week.
-//  Last updated: 2026-05-09
+//  Last updated: 2026-06-12
 // ════════════════════════════════════════════════════════════
 const LEADS = [
 
   // ── CCS ─────────────────────────────────────────────────
 
   { company:"Storegga (Acorn CCS)", country:"UK / Scotland", market:"CCS",
-    project:"Acorn CCS & Hydrogen", stage:"Pre-FID → FID 2026", score:9,
-    trigger:"£200M UK government funding secured June 2025. Moving toward FID. Pure-play CCS developer (~50 people) with no in-house well engineering team.",
-    gap:"Small company. No internal well engineering. Relies entirely on consultants and partners for subsurface expertise.",
+    project:"Acorn CCS & Hydrogen", stage:"⚠ Uncertainty – Storegga exiting (Dec 2025)", score:6,
+    trigger:"RISK UPDATE (June 2026): Storegga announced exit ('Project Oasis', Dec 2025) — selling its 30% lead-developer stake. No buyer identified as of early 2026. Project has missed prior FID targets and UK Minister has described it as 'still on track' despite the leadership vacuum. £200M UK govt funding is in place, but the project needs a new lead developer. Watch closely for any new owner announcement.",
+    gap:"Project in governance limbo. If a new developer acquires Storegga's stake, they will have zero CCS well engineering capability and will need to rebuild the entire technical team from scratch.",
     service:"Well engineering advisory · injection well design · subsurface reservoir analysis · operational framework",
-    contact:"VP Engineering / Technical Director. Lead with CCS well operations capability and proven track record.",
-    source:"https://pgjonline.com/news/2025/june/scotland-s-acorn-project-gets-272-million-boost" },
+    contact:"Monitor for new owner announcement — then approach new lead developer immediately. Whoever acquires Storegga's stake will be a high-urgency contact: £200M funded, technically understaffed, facing a hard FID deadline.",
+    source:"https://carbonherald.com/storegga-to-pull-out-of-acorn-carbon-capture-project/" },
 
   { company:"Arverne / Lithium de France", country:"France", market:"Geothermal",
     project:"Lithium de France – Alsace Rhine Graben", stage:"Active drilling (Nov 2025–)", score:9,
@@ -342,12 +471,12 @@ const LEADS = [
     source:"https://www.businesswire.com/news/home/20251124873358/en/Arverne-Launch-of-the-First-Geothermal-Drilling" },
 
   { company:"EBN (Energie Beheer Nederland)", country:"Netherlands", market:"CCS",
-    project:"Porthos (2026) + Aramis (FID 2026)", stage:"Porthos ops 2026 · Aramis FID 2026", score:8,
-    trigger:"Co-developer of both Porthos (operational 2026) and Aramis (22 Mt/yr, FID 2026). Dutch state infrastructure entity, not a well engineering company.",
-    gap:"State infrastructure/finance entity. Very limited internal well operations and subsurface capability.",
-    service:"CCS injection well operations · subsurface reservoir monitoring · well integrity · team capability building",
-    contact:"EBN CCS Programme Director or Subsurface Manager. Position as a long-term knowledge partner.",
-    source:"https://www.aramis-ccs.com/news/aramis-takes-next-step-towards-investment-decision/" },
+    project:"Porthos (operational) + Aramis (FID 2026–2027, $726M Dutch govt)", stage:"Porthos injecting · Aramis FID imminent", score:9,
+    trigger:"MAJOR UPDATE (June 2026): Dutch government has committed $726M (€639M) to Aramis. Shell and TotalEnergies have pulled back from pipeline ownership — EBN and Gasunie will now jointly own and operate the entire Aramis infrastructure as a 50:50 partnership. EBN is moving from a passive co-developer to the active lead operator of a 22 Mt/yr CCS infrastructure system. FID expected 2026–2027. This massively increases their need for independent subsurface and well engineering expertise.",
+    gap:"State infrastructure/finance entity becoming the lead operator of Europe's largest CO₂ pipeline. No internal CCS injection well operations, reservoir management, or subsurface engineering capability.",
+    service:"CCS injection well operations · subsurface reservoir monitoring · well integrity management · long-term capability building programme",
+    contact:"EBN CCS Programme Director or Subsurface Manager. Lead with the Aramis operator transition — they now own the infrastructure and need a technical partner for the long haul.",
+    source:"https://carboncredits.com/netherlands-commits-726-million-to-aramis-ccs-project-as-shell-and-total-shift-strategies/" },
 
   { company:"Hades Mining", country:"Germany", market:"Geothermal",
     project:"Laser Drilling for Ultra-Deep Geothermal", stage:"Pre-commercial · first field ops 2026", score:8,
@@ -382,12 +511,12 @@ const LEADS = [
     source:"https://www.catf.us/2025/11/carbon-capture-storage-europe-slow-but-significant-progress-2025/" },
 
   { company:"Eavor Technologies (Europe)", country:"Germany", market:"Geothermal",
-    project:"Geretsried + Second Loop (Mar 2026)", stage:"Loop 1 operational · Loop 2 drilling Mar 2026", score:7,
-    trigger:"First power to grid Dec 2025. Second loop drilling starting March 2026. Canadian company rapidly expanding European operations.",
-    gap:"Canadian HQ. European operations built on OMV partnership. Second loop creates need for local European well engineering support.",
+    project:"Geretsried + Second Loop (delayed – H2 2026 at earliest)", stage:"Loop 1 operational · Loop 2 delayed (funding)", score:6,
+    trigger:"DELAY UPDATE (June 2026): Second loop drilling has NOT started as planned in March 2026. Eavor has stated it hopes to begin drilling again in H2 2026 — but this is 'dependent on fundraising.' The project has already exceeded its original budget range. Loop 1 is operational and delivering power to grid, but expansion is stalled. Opportunity reduced until funding is resolved.",
+    gap:"Canadian HQ. European subsurface and regulatory expertise still needed when Loop 2 proceeds. Watch for fundraising close or new partner announcement as the trigger to re-engage.",
     service:"European regulatory advisory · subsurface support for Loop 2+ · local well engineering expertise",
-    contact:"Eavor Europe Operations Director. Emphasise local European regulatory and subsurface knowledge.",
-    source:"https://www.powermag.com/eavors-first-of-its-kind-closed-loop-geothermal-project-produces-grid-power-in-germany/" },
+    contact:"Eavor Europe Operations Director. Re-engage when Loop 2 fundraising closes — position Ross as the European well engineering partner that accelerates commissioning.",
+    source:"https://cleantechnica.com/2026/04/01/closed-loop-geothermal-moves-forward-in-germany/" },
 
   { company:"Stockholm Exergi (BECCS)", country:"Sweden", market:"CCS",
     project:"BECCS Stockholm – 800 kt CO₂/yr", stage:"Under construction · operational 2028", score:7,
@@ -446,6 +575,51 @@ const LEADS = [
     service:"UKCS well engineering advisory · casing design reviews · regulatory compliance support · single placements for Wells team",
     contact:"UK Technical Manager or Wells Superintendent. Lead with UKCS regulatory expertise, North Sea casing design experience, and ability to bridge Chinese NOC working practices with UK requirements.",
     source:"https://www.cnoocltd.com" },
+
+
+  // ── NEW MAY 19 2026 ─────────────────────────────────────
+
+  { company:"EnEarth (Energean – Prinos CO₂)", country:"Greece", market:"CCS",
+    project:"Prinos CO₂ Storage – SE Europe's first CCS facility", stage:"Active drilling 2026 · FID end-2026 · ops 2030", score:9,
+    trigger:"UPDATE (June 2026): EU Commission has given positive opinion on the Prinos reservoir — confirmed technically suitable for safe, long-term CO₂ storage. First wells (2 pilots) being drilled H1 2026. FID expected end of 2026 once first binding customer agreements signed. Full 15-well programme (6 injection, 9 water production) follows FID. €270M EU Innovation Fund grant secured. Operations planned from 2030. EnEarth is a small E&P subsidiary with no CCS well operations experience.",
+    gap:"E&P company (Energean) entering dedicated CO₂ storage for the first time. No in-house CCS well engineering, injection well design, or reservoir management capability.",
+    service:"CCS injection well design · drilling supervision · well operations framework · reservoir monitoring · subsurface advisory",
+    contact:"EnEarth CEO / Technical Director. Lead with CCS injection well design experience and the ability to support the full 15-well development programme.",
+    source:"https://www.gasworld.com/story/prinos-co2-storage-site-by-energean-set-for-first-drilling-in-2026/2156420.article/" },
+
+  { company:"GA Drilling", country:"Slovakia / Netherlands", market:"Geothermal",
+    project:"Deep Geothermal – Netherlands 6 km Well 2026", stage:"First commercial well negotiations 2026", score:8,
+    trigger:"In talks to drill a 6 km well in the Netherlands in 2026 — potentially Europe's deepest geothermal well. Demonstrated plasma drill in actual wellbore at NORCE Ullrigg, Stavanger, February 2026. Deep-tech startup moving from R&D to first commercial deployment.",
+    gap:"Plasma drilling technology startup. Innovative IP but needs conventional well engineering for planning, casing design, regulatory compliance, and operational oversight of a deep well.",
+    service:"Well planning & engineering advisory · casing design for deep well · HSE & well control framework · Dutch regulatory navigation",
+    contact:"CEO / Head of Projects. Position Ross as the conventional well engineering partner that de-risks their first 6 km commercial well.",
+    source:"https://www.gadrilling.com/" },
+
+  { company:"Yara Sluiskil (CCS)", country:"Netherlands", market:"CCS",
+    project:"Sluiskil CCS – World's First Cross-Border CCS Operation", stage:"Operational 2026 · 800 kt CO₂/yr", score:7,
+    trigger:"World's first cross-border CCS project now operational. 800,000 t CO₂/yr captured at fertilizer plant and stored via Northern Lights. Fertilizer company operating CCS for the first time. 15-year operation ahead requiring sustained technical oversight.",
+    gap:"Fertilizer/chemicals manufacturer. Entire CCS injection and storage operation is outside core competence. Needs independent technical assurance and capability building for long-term operations.",
+    service:"CCS operations advisory · independent technical assurance · injection well programme oversight · team capability building",
+    contact:"Head of CCS / Sustainability Director. Offer long-term CCS technical advisory to support the 15-year operation.",
+    source:"https://www.yara.com/sustainability/transforming-food-system/carbon-capture-and-storage/" },
+
+  // ── NEW JUNE 12 2026 ────────────────────────────────────
+
+  { company:"Vulcan Energy Resources (Lionheart)", country:"Germany / Upper Rhine Valley", market:"Geothermal",
+    project:"Lionheart – Geothermal Lithium Project (€2.2B)", stage:"Active drilling 2026 · 2nd rig H2 2026 · 24 wells total", score:8,
+    trigger:"NEW LEAD (June 2026): Record drill results on first Lionheart production well (LSC-1b). Drilling 6th well (LSC-2) now — expected Q2 2026 completion. Second rig deploying H2 2026. 24 production and reinjection wells planned total. Siemens partnership signed. Volkswagen offtake agreement. €2.2B project, €250M equity, EU-backed. Commercial lithium and geothermal power production targeted 2028. Drilling subsidiary is Vercana (100% owned) — but the scale and complexity of a 24-well geothermal programme creates demand for independent subsurface and reservoir engineering expertise.",
+    gap:"Scale-up from a few pilot wells to a 24-well geothermal programme is technically complex. Vercana handles drilling execution, but geothermal reservoir management, well performance optimisation, and operational framework development for such a large programme exceeds their current capability.",
+    service:"Geothermal reservoir engineering · well performance optimisation · operational framework for multi-well programme · independent technical assurance · capability building",
+    contact:"Head of Operations / VP Engineering (Lionheart). Lead with geothermal reservoir expertise and proven multi-well programme experience. Emphasise scale-up risk management.",
+    source:"https://www.thinkgeoenergy.com/vulcan-energy-reports-good-productivity-of-first-well-drilled-for-lionheart-project-in-germany/" },
+
+  { company:"DESFA (APOLLOCO₂)", country:"Greece", market:"CCS",
+    project:"APOLLOCO₂ – SE European CCS Transport & Storage Hub", stage:"Development · storage ops 2026–2027", score:7,
+    trigger:"€169M EU Innovation Fund secured. $4.2B total programme value. Greece's first CCS midstream hub, connecting industrial emitters across SE Europe via CO₂ pipeline. DESFA is a gas TSO with no CCS subsurface or well operations experience.",
+    gap:"Gas transmission system operator. CO₂ transport adjacent to existing expertise, but CCS subsurface storage and injection well operations are entirely new territory.",
+    service:"CCS storage well advisory · subsurface characterisation · injection well operations framework · team training",
+    contact:"APOLLOCO₂ Project Director / Technical Manager. Frame as the independent CCS subsurface expert to complement their pipeline and midstream expertise.",
+    source:"https://www.desfa.gr/en/innovation-green-gases/participation-in-projects-2/prinos-offshore-storage-at-prinos-field-for-emissions-from-el-by-pipeline-and-from-bg-hr-cy-el-it-and-si-by-ship/" },
 
 ]; // ← end of LEADS array
 
